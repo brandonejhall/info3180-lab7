@@ -1,5 +1,15 @@
 <template >
+    <div class = 'alert enotifs' v-if="errors.length">
+        <ul>
+            <li v-for="error in errors" :key = 'error'>{{ error }}</li>
+        </ul>
+    </div>
+    <div class = 'alert snotifs' v-else-if = "message.length">
+        <p id  = "success" >{{message}}</p>
+    </div>
+    
     <form id = "uploadForm" action = '' method = 'POST' @submit.prevent="uploadPhoto" enctype="multipart/form-data">
+
     <div class = "data">
         <label for="description">Description: </label>
         <input type="text" id="description" name="description"><br><br>
@@ -18,9 +28,9 @@
 export default {
     data() {
         return {
-            csrf_token: '',
-            success: '',
-            error = []          
+            message: '',
+            errors: [],
+            csrf_token: ''
         }
     },
     methods: {
@@ -39,12 +49,12 @@ export default {
             .then(function (data) {
             // display a success message
             console.log(data);
-            self.success = data.message
+            self.message = data.message
             
             })
             .catch(function (error) {
             console.log(error);
-            self.error = error.message
+            self.errors = error
             
         });
         },
@@ -64,3 +74,23 @@ export default {
     }
 }
 </script>
+
+<style>
+.alert{
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+.snotifs{
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.enotifs{
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+</style>

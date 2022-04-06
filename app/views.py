@@ -33,9 +33,12 @@ def upload():
         if form.validate_on_submit:
             desc = form.description.data
             img = form.image.data
-            imgName = secure_filename(img.filename)
-            img.save(os.path.join(app.config['UPLOAD_FOLDER'], imgName))
-            return jsonify(message = "File Upload Successful", filename = imgName, description = desc)
+            if img == None or desc == None:
+                return jsonify(errors = form_errors(form))
+            else:
+                imgName = secure_filename(img.filename)
+                img.save(os.path.join(app.config['UPLOAD_FOLDER'], imgName))
+                return jsonify(message = "File Upload Successful", filename = imgName, description = desc)
         else:
             return jsonify(errors = form_errors(form))
 
